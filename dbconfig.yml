@@ -1,0 +1,11 @@
+development:
+  dialect: mysql
+  dir: db/migrations
+  datasource: root@tcp(127.0.0.1)/go_todo_app?parseTime=true
+  table: migrations
+
+production:
+  dialect: mysql
+  dir: db/migrations
+  datasource: dbname=myapp sslmode=disable
+  table: migrations
