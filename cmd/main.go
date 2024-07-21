@@ -11,8 +11,6 @@ import (
 )
 
 func main() {
-	app := handler.App{}
-	router := app.Router()
 	cfg := mysql.Config{
 		User:   "root",
 		Passwd: "",
@@ -28,6 +26,9 @@ func main() {
 	if pingErr != nil {
 		log.Fatal(pingErr)
 	}
+
+	app := handler.NewApp(db)
+	router := app.Router()
 
 	http.ListenAndServe(":8080", router)
 }
