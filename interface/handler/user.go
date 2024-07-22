@@ -33,7 +33,7 @@ func (h *UserHandlerImpl) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.Success(w, r, users)
+	response.Success(w, r, toUserListResponse(users))
 }
 
 func (h *UserHandlerImpl) GetByID(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +47,7 @@ func (h *UserHandlerImpl) GetByID(w http.ResponseWriter, r *http.Request) {
 		response.Error(w, r, err)
 		return
 	}
-	response.Success(w, r, user)
+	response.Success(w, r, toUserResponse(user))
 }
 
 func toUserResponse(user entity.User) response.User {
@@ -61,7 +61,7 @@ func toUserResponse(user entity.User) response.User {
 	}
 }
 
-func toUserListResponse(users []entity.User, total int) response.UserList {
+func toUserListResponse(users []entity.User) response.UserList {
 	res := make([]response.User, 0, len(users))
 	for i := range users {
 		res = append(res, toUserResponse(users[i]))
