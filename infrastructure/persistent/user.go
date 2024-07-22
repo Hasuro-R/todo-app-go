@@ -6,15 +6,15 @@ import (
 	"todo-app/domain/repository"
 )
 
-type UserInfrastructure struct {
+type UserPersistent struct {
 	db *sql.DB
 }
 
-func NewUserInfrastructure(db *sql.DB) repository.UserRepository {
-	return &UserInfrastructure{db}
+func NewUserPersistent(db *sql.DB) repository.UserRepository {
+	return &UserPersistent{db}
 }
 
-func (r *UserInfrastructure) FindAll() ([]entity.User, error) {
+func (r *UserPersistent) FindAll() ([]entity.User, error) {
 	rows, err := r.db.Query("SELECT * FROM users")
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (r *UserInfrastructure) FindAll() ([]entity.User, error) {
 	return users, nil
 }
 
-func (r *UserInfrastructure) FindByID(id int) (entity.User, error) {
+func (r *UserPersistent) FindByID(id int) (entity.User, error) {
 	row := r.db.QueryRow(`SELECT * FROM users WHERE id = ?`, id)
 	user, err := toEntityUser(row)
 	if err != nil {

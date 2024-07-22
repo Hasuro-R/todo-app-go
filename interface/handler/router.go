@@ -16,7 +16,7 @@ type App struct {
 }
 
 func NewApp(db *sql.DB) *App {
-	userRepository := persistent.NewUserInfrastructure(db)
+	userRepository := persistent.NewUserPersistent(db)
 	workspaceRepository := persistent.NewWorkspacePersistent(db)
 
 	userService := service.NewUserRepository(userRepository)
