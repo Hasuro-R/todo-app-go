@@ -8,6 +8,7 @@ import (
 type WorkspaceService interface {
 	GetAll() (workspaces []entity.Workspace, err error)
 	GetByUserID(userID int) (workspaces []entity.Workspace, err error)
+	Create(user entity.Workspace) (workspace entity.Workspace, err error)
 }
 
 type WorkspaceServiceImpl struct {
@@ -36,4 +37,13 @@ func (srv *WorkspaceServiceImpl) GetByUserID(userID int) ([]entity.Workspace, er
 	}
 
 	return workspaces, nil
+}
+
+func (srv *WorkspaceServiceImpl) Create(workspace entity.Workspace) (entity.Workspace, error) {
+	workspace, err := srv.workspace.Create(workspace)
+	if err != nil {
+		return entity.Workspace{}, err
+	}
+
+	return workspace, nil
 }

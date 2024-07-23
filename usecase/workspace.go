@@ -8,6 +8,7 @@ import (
 type WorkspaceUseCase interface {
 	GetAll() (workspaces []entity.Workspace, err error)
 	GetByUserID(userID int) (workspaces []entity.Workspace, err error)
+	Create(workspace entity.Workspace) (entity.Workspace, error)
 }
 
 type WorkspaceUseCaseImpl struct {
@@ -36,4 +37,13 @@ func (uc *WorkspaceUseCaseImpl) GetByUserID(userID int) ([]entity.Workspace, err
 	}
 
 	return workspaces, nil
+}
+
+func (uc *WorkspaceUseCaseImpl) Create(workspace entity.Workspace) (entity.Workspace, error) {
+	workspace, err := uc.workspace.Create(workspace)
+	if err != nil {
+		return entity.Workspace{}, err
+	}
+
+	return workspace, nil
 }
