@@ -40,11 +40,14 @@ func (a *App) Router() *chi.Mux {
 
 	router.Route("/users", func(r chi.Router) {
 		r.Get("/", a.user.GetAll)
+
 		r.Get("/{userID}", a.user.GetByID)
 	})
 
 	router.Route("/workspaces", func(r chi.Router) {
 		r.Get("/", a.workspace.GetAll)
+		r.Post("/", a.workspace.Create)
+
 		r.Get("/{userID}", a.workspace.GetByUserID)
 	})
 

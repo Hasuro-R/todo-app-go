@@ -13,6 +13,7 @@ import (
 type WorkspaceHandler interface {
 	GetAll(w http.ResponseWriter, r *http.Request)
 	GetByUserID(w http.ResponseWriter, r *http.Request)
+	Create(w http.ResponseWriter, r *http.Request)
 }
 
 type WorkspaceHandlerImpl struct {
@@ -50,6 +51,22 @@ func (h *WorkspaceHandlerImpl) GetByUserID(w http.ResponseWriter, r *http.Reques
 	response.Success(w, r, toWorkspaceListResponse(workspaces))
 }
 
+func (h *WorkspaceHandlerImpl) Create(w http.ResponseWriter, r *http.Request) {
+	newWorkspace := entity.Workspace{
+		Title:  "開発",
+		Emoji:  "💻",
+		UserID: 1,
+	}
+
+	workspace, err := h.workspace.Create(newWorkspace)
+	if err != nil {
+		response.Error(w, r, err)
+		return
+	}
+
+	response.Success(w, r, toWorkspaceResponse(workspace))
+}
+
 func toWorkspaceResponse(workspace entity.Workspace) response.Workspace {
 	return response.Workspace{
 		ID:        workspace.ID,
@@ -69,4 +86,9 @@ func toWorkspaceListResponse(workspaces []entity.Workspace) response.WorkspaceLi
 	return response.WorkspaceList{
 		Workspaces: res,
 	}
+}
+
+type CreateWorkspaceRequest struct {
+	Title string `json:"title"`
+	Emoji string `json:"emoji"`
 }
