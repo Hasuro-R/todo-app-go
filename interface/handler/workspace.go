@@ -4,10 +4,12 @@ import (
 	"net/http"
 	"strconv"
 	"todo-app/domain/entity"
+	"todo-app/interface/request"
 	"todo-app/interface/response"
 	"todo-app/usecase"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/render"
 )
 
 type WorkspaceHandler interface {
@@ -52,9 +54,14 @@ func (h *WorkspaceHandlerImpl) GetByUserID(w http.ResponseWriter, r *http.Reques
 }
 
 func (h *WorkspaceHandlerImpl) Create(w http.ResponseWriter, r *http.Request) {
+	var req request.CreateWorkspace
+	if err := render.DecodeJSON(r.Body, &req); err != nil {
+		response.Success(w, r, req.Emoji)
+	}
+
 	newWorkspace := entity.Workspace{
-		Title:  "開発",
-		Emoji:  "💻",
+		Title:  req.Title,
+		Emoji:  req.Emoji,
 		UserID: 1,
 	}
 
@@ -86,9 +93,4 @@ func toWorkspaceListResponse(workspaces []entity.Workspace) response.WorkspaceLi
 	return response.WorkspaceList{
 		Workspaces: res,
 	}
-}
-
-type CreateWorkspaceRequest struct {
-	Title string `json:"title"`
-	Emoji string `json:"emoji"`
 }
