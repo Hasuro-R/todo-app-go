@@ -1,0 +1,42 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+    volumes:
+      - .:/app
+    ports:
+      - 8080:8080
+    networks:
+      go_todo_app:
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    platform: linux/x86_64
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: todo_app
+      TZ: 'Asia/Tokyo'
+    ports:
+      - 3307:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      go_todo_app:
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
+
+networks:
+  go_todo_app:
+    driver: bridge
