@@ -12,11 +12,13 @@ import (
 
 func main() {
 	cfg := mysql.Config{
-		User:   "root",
-		Passwd: "",
-		Net:    "tcp",
-		Addr:   "127.0.0.1:3306",
-		DBName: "go_todo_app",
+		User:                 "root",
+		Passwd:               "password",
+		Net:                  "tcp",
+		Addr:                 "db:3306",
+		DBName:               "todo_app",
+		AllowNativePasswords: true,
+		ParseTime:            true,
 	}
 	db, err := sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
